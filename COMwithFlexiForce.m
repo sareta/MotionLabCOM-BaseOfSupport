@@ -53,6 +53,10 @@ rightglute =5; %right side of the sitting outline
 leftknee=18; % knee offsets 
 rightknee=18; 
 
+storage1 = [];
+storage2 = [];
+storage3 = [];
+
 while(InitialTime < Max)
     data = g4client('127.0.0.1', 7234, .2);
     totalFrames = size(data, 1);
@@ -87,6 +91,10 @@ while(InitialTime < Max)
     AVG1 = mean(markerOne);
     AVG2 = mean(markerTwo);
     AVG3 = mean(markerThree);
+    storage1 = [storage1;AVG1];
+    storage2 = [storage2;AVG2];
+    storage3 = [storage3;AVG3];
+    
     R = (AVG1(4)-90);   %alpha angle for left foot
     S = (AVG2(4)-90);   %alpha angle for right foot 
     T = (AVG3(4)-90);   %alpha angle for sacral marker
