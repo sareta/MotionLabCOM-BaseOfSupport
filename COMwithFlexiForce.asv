@@ -9,7 +9,7 @@ end
 %Make an object of arduino
 a=arduino();
 %Set time bounds
-Max = 500;
+Max = 100;
 %Set time interval
 InitialTime = 1;
 %Set initial time
@@ -27,8 +27,7 @@ minorwidth=input('Minor Foot Width (Sesamod bone 1 to Toe -horizontal) in inches
 ToeAndHeelx=1+minorwidth;
 Lateralx=1+width;
 LateralAndMedialy=length-minorlength;
-%}
-n=1;
+n=1
 topright_new=[2 10];
 topleft_new=[-2 10];
 leftleft_new=[-4 7];
@@ -37,8 +36,7 @@ bottomright_new=[2 0];
 bottomleft_new=[-2 0];
 rightleft_new=[1 7];
 rightright_new=[4 7];
-
-%{
+%}
 lefttoe= 7.5; % top of the foot where the toe is
 leftheel= 5;% the heel 
 leftoutside= 2.5; % the outer part of the left foot
@@ -56,7 +54,7 @@ leftknee=18; % knee offsets
 rightknee=18; 
 
 while(InitialTime < Max)
-    data = g4client('127.0.0.1', 7234, .1);
+    data = g4client('127.0.0.1', 7234, .2);
     totalFrames = size(data, 1);
 
     %intialize the marker matrices
@@ -92,7 +90,7 @@ while(InitialTime < Max)
     R = (AVG1(4)-90);   %alpha angle for left foot
     S = (AVG2(4)-90);   %alpha angle for right foot 
     T = (AVG3(4)-90);   %alpha angle for sacral marker
-    n=1
+    n=1;
     topleft = [AVG1(1), AVG1(2)+ lefttoe];             
     bottomleft = [AVG1(1), AVG1(2)-leftheel];                  
     rightleft = [ AVG1(1)+leftoutside, AVG1(2)];        
@@ -126,8 +124,9 @@ while(InitialTime < Max)
    rightright_new(n,2)= (((rightright(n,1)-AVG3(1))*sind(S)) + ((rightright(n,2)-AVG3(2))*cosd(S))) +AVG3(2);
    leftright_new(n,1)= (((leftright(n,1)-AVG3(1))*cosd(S)) - ((leftright(n,2)-AVG3(2))*sind(S))) + AVG3(1);
    leftright_new(n,2)= (((leftright(n,1)-AVG3(1))*sind(S)) + ((leftright(n,2)-AVG3(2))*cosd(S))) +AVG3(2);
-   
-sitleft_new(n,1) = (((sitleft(n,1)-markerTwo(n,1))*cosd(T(n,1))) - ((sitleft(n,2)-markerTwo(n,2))*sind(T(n,1)))) + markerTwo(n,1);
+    
+   %{
+   sitleft_new(n,1) = (((sitleft(n,1)-markerTwo(n,1))*cosd(T(n,1))) - ((sitleft(n,2)-markerTwo(n,2))*sind(T(n,1)))) + markerTwo(n,1);
    sitleft_new(n,2) = (((sitleft(n,1)-markerTwo(n,1))*sind(T(n,1))) + ((sitleft(n,2)-markerTwo(n,2))*cosd(T(n,1)))) +markerTwo(n,2) ;
    sitright_new(n,1) = (((sitright(n,1)-markerTwo(n,1))*cosd(T(n,1))) - ((sitright(n,2)-markerTwo(n,2))*sind(T(n,1)))) + markerTwo(n,1);
    sitright_new(n,2) =(((sitright(n,1)-markerTwo(n,1))*sind(T(n,1))) + ((sitright(n,2)-markerTwo(n,2))*cosd(T(n,1)))) +markerTwo(n,2) ;
@@ -137,10 +136,8 @@ sitleft_new(n,1) = (((sitleft(n,1)-markerTwo(n,1))*cosd(T(n,1))) - ((sitleft(n,2
  
    kneerightout_new(n,1)=(((kneerightout(n,1)-markerThree(n,1))*cosd(S(n,1))) - ((kneerightout(n,2)-markerThree(n,2))*sind(S(n,1)))) + markerThree(n,1) ;
    kneerightout_new(n,2)=(((kneerightout(n,1)-markerThree(n,1))*sind(S(n,1))) + ((kneerightout(n,2)-markerThree(n,2))*cosd(S(n,1)))) + markerThree(n,2) ;
-
+   %}
     sacral= [AVG2(1),AVG2(2)];
-%}    
-while(InitialTime < Max)
     b = readVoltage(a,'A0');
     c = readVoltage(a,'A1');
     d = readVoltage(a,'A2');
@@ -242,11 +239,11 @@ while(InitialTime < Max)
     plot(XValues,YValues,'m')
     fill(XValues,YValues,'c')
     hold on
-    plot(xc,yc,'b+')
+    plot(xc,yc,'b+',sacral(1),sacral(2),'ro')
     hold off 
     grid ON
-    xlim ([-5 5])  % can change the limits of the graph once larger area is being used 
-    ylim ([0 11]) 
+    xlim ([-120 120])  % can change the limits of the graph once larger area is being used 
+    ylim ([-120 50]) 
     InitialTime = InitialTime +1;
     drawnow;
 end

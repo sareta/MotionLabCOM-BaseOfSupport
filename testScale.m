@@ -11,7 +11,7 @@ end
 %Make an object of arduino
 a=arduino();
 %Set time bounds
-Max = 300;
+Max = 200;
 %Set time interval
 InitialTime = 1;
 %Set initial time
@@ -53,3 +53,7 @@ RToeSTDEV = std(y);
 RHeelSTDEV = std(z);
 RToeMin = RToeAve-1.25.*RToeSTDEV
 RHeelMin = RHeelAve-1.25.*RHeelSTDEV
+RToeZeroMax = RToeAve+RToeSTDEV
+RHeelZeroMax = RHeelAve+RHeelSTDEV
+LToeZeroMax = LToeAve+LToeSTDEV
+LHeelZeroMax = LHeelAve+LHeelSTDEV

@@ -9,7 +9,7 @@ end
 %Make an object of arduino
 a=arduino();
 %Set time bounds
-Max = 500;
+Max = 100;
 %Set time interval
 InitialTime = 1;
 %Set initial time
@@ -28,7 +28,7 @@ ToeAndHeelx=1+minorwidth;
 Lateralx=1+width;
 LateralAndMedialy=length-minorlength;
 %}
-n=1;
+n=1
 topright_new=[2 10];
 topleft_new=[-2 10];
 leftleft_new=[-4 7];
@@ -246,7 +246,7 @@ while(InitialTime < Max)
     hold off 
     grid ON
     xlim ([-5 5])  % can change the limits of the graph once larger area is being used 
-    ylim ([0 11]) 
+    ylim ([-11 11]) 
     InitialTime = InitialTime +1;
     drawnow;
 end

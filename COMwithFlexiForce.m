@@ -4,7 +4,7 @@ global a;
 %Find COM port
 if ~isempty(instrfind);
     fclose(instrfind);
-    delete(instrfind);A 
+    delete(instrfind); 
 end
 %Make an object of arduino
 a=arduino();
@@ -90,7 +90,7 @@ while(InitialTime < Max)
     R = (AVG1(4)-90);   %alpha angle for left foot
     S = (AVG2(4)-90);   %alpha angle for right foot 
     T = (AVG3(4)-90);   %alpha angle for sacral marker
-    n=1
+    n=1;
     topleft = [AVG1(1), AVG1(2)+ lefttoe];             
     bottomleft = [AVG1(1), AVG1(2)-leftheel];                  
     rightleft = [ AVG1(1)+leftoutside, AVG1(2)];        
@@ -242,8 +242,8 @@ while(InitialTime < Max)
     plot(xc,yc,'b+',sacral(1),sacral(2),'ro')
     hold off 
     grid ON
-    xlim ([-300 300])  % can change the limits of the graph once larger area is being used 
-    ylim ([-300 300]) 
+    xlim ([-120 120])  % can change the limits of the graph once larger area is being used 
+    ylim ([-120 50]) 
     InitialTime = InitialTime +1;
     drawnow;
 end
