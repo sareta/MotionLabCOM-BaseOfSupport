@@ -9,7 +9,7 @@ end
 %Make an object of arduino
 a=arduino();
 %Set time bounds
-Max = 500;
+Max = 150;
 %Set time interval
 InitialTime = 1;
 %Set initial time
@@ -141,10 +141,10 @@ sitleft_new(n,1) = (((sitleft(n,1)-markerTwo(n,1))*cosd(T(n,1))) - ((sitleft(n,2
     sacral= [AVG2(1),AVG2(2)];
 %}    
 while(InitialTime < Max)
-    b = readVoltage(a,'A0');
-    c = readVoltage(a,'A1');
-    d = readVoltage(a,'A2');
-    e = readVoltage(a,'A3');
+    b = mean([readVoltage(a,'A0') readVoltage(a,'A0') readVoltage(a,'A0')]);
+    c = mean([readVoltage(a,'A1') readVoltage(a,'A1') readVoltage(a,'A1')]);
+    d = mean([readVoltage(a,'A2') readVoltage(a,'A2') readVoltage(a,'A2')]);
+    e = mean([readVoltage(a,'A3') readVoltage(a,'A3') readVoltage(a,'A3')]);
     w = [w,1000*b];
     x = [x,1000*c];
     y = [y,1000*d];
