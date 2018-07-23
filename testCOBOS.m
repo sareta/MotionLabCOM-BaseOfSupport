@@ -159,12 +159,12 @@ while(InitialTime < Max)
     else
         LH=0;
     end
-    if 1000*d > RToeMin
+    if 1000*e > RToeMin
         RT=3;
     else
         RT=0;
     end
-    if 1000*e > RHeelMin
+    if 1000*d > RHeelMin
         RH=1;
     else
         RH=0;
