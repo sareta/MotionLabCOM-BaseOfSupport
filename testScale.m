@@ -49,7 +49,7 @@ LeftHeel = filter(windowSizeVector,range,x);
 RightToe = filter(windowSizeVector,range,y);
 RightHeel = filter(windowSizeVector,range,z);
 t=1:1:200;
-plot(t,LeftToe,'m',t,LeftHeel,'b',t,RightToe,'r',t,RightHeel,'g')
+plot(t,LeftToe,'b',t,LeftHeel,'m',t,RightToe,'r',t,RightHeel,'g')
 title('Voltage in Flexiforce Sensors')
 format compact
 LToeAve = mean(w,2)
