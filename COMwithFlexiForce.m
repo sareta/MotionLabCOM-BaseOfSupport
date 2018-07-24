@@ -58,7 +58,7 @@ storage2 = [];
 storage3 = [];
 
 while(InitialTime < Max)
-    data = g4client('127.0.0.1', 7234, .1);
+    data = g4client('127.0.0.1', 7234, .2);
     totalFrames = size(data, 1);
 
     %intialize the marker matrices
@@ -115,14 +115,14 @@ while(InitialTime < Max)
     kneeleftout= [AVG1(1)+1.5, AVG1(2)-leftknee]; %left knee outer point 
     kneerightout= [AVG3(1)-1.5, AVG3(2)-rightknee]; %right knee outer point 
     
-    topleft_new(n,1) = (((topleft(n,1)-AVG1(1))*cosd(R)) - ((topleft(n,2)-AVG1(2))*sind(R))) +AVG1(1) ;
+   topleft_new(n,1) = (((topleft(n,1)-AVG1(1))*cosd(R)) - ((topleft(n,2)-AVG1(2))*sind(R))) + AVG1(1) ;
    topleft_new(n,2) = (((topleft(n,1)-AVG1(1))*sind(R)) + ((topleft(n,2)-AVG1(2))*cosd(R))) + AVG1(2) ;
-   bottomleft_new(n,1)= (((bottomleft(n,1)-AVG1(1))*cosd(R)) - ((bottomleft(n,2)-AVG1(2))*sind(R))) +AVG1(1);
-   bottomleft_new(n,2)= (((bottomleft(n,1)-AVG1(1))*sind(R)) + ((bottomleft(n,2)-AVG1(2))*cosd(R))) + AVG1(2) ;
+   bottomleft_new(n,1) = (((bottomleft(n,1)-AVG1(1))*cosd(R)) - ((bottomleft(n,2)-AVG1(2))*sind(R))) +AVG1(1);
+   bottomleft_new(n,2) = (((bottomleft(n,1)-AVG1(1))*sind(R)) + ((bottomleft(n,2)-AVG1(2))*cosd(R))) + AVG1(2) ;
    rightleft_new(n,1) = (((rightleft(n,1)-AVG1(1))*cosd(R)) - ((rightleft(n,2)-AVG1(2))*sind(R))) + AVG1(1);
-   rightleft_new(n,2)= (((rightleft(n,1)-AVG1(1))*sind(R)) + ((rightleft(n,2)-AVG1(2))*cosd(R))) + AVG1(2) ;
-   leftleft_new(n,1)= (((leftleft(n,1)-AVG1(1))*cosd(R)) - ((leftleft(n,2)-AVG1(2))*sind(R))) + AVG1(1);
-   leftleft_new(n,2)= (((leftleft(n,1)-AVG1(1))*sind(R)) + ((leftleft(n,2)-AVG1(2))*cosd(R))) + AVG1(2) ;
+   rightleft_new(n,2) = (((rightleft(n,1)-AVG1(1))*sind(R)) + ((rightleft(n,2)-AVG1(2))*cosd(R))) + AVG1(2) ;
+   leftleft_new(n,1) = (((leftleft(n,1)-AVG1(1))*cosd(R)) - ((leftleft(n,2)-AVG1(2))*sind(R))) + AVG1(1);
+   leftleft_new(n,2) = (((leftleft(n,1)-AVG1(1))*sind(R)) + ((leftleft(n,2)-AVG1(2))*cosd(R))) + AVG1(2) ;
    
    topright_new(n,1) = (((topright(n,1)-AVG3(1))*cosd(S)) - ((topright(n,2)-AVG3(2))*sind(S))) + AVG3(1)  ;
    topright_new(n,2)= (((topright(n,1)-AVG3(1))*sind(S)) + ((topright(n,2)-AVG3(2))*cosd(S))) +AVG3(2) ;

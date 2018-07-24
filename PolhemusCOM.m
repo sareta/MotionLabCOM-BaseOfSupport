@@ -33,73 +33,73 @@ for i = 1:totalFrames/3 %a third of the row size
     markerThree(i,6) = data(i*3, 10);
 end
 
-R = (markerOne(:,4)-90) ;  %alpha angle for left foot
-S = (markerThree(:,4)-90); %alpha angle for right foot 
-T = (markerTwo(:,4)-90);   %alpha angle for sacral marker
+a = (markerOne(:,4)-90) ;  %alpha angle for left foot
+b = (markerThree(:,4)-90); %alpha angle for right foot 
+c= (markerTwo(:,4)-90);   %alpha angle for sacral marker
 
-% offests will need to be changed for each different person 
-lefttoe= 4; % top of the foot where the toe is
-leftheel= 7;% the heel 
-leftoutside= 2; % the outer part of the left foot
-leftinner= 1.75;  % the inner part of the left foot
+% offests will need to be changed fer person 
+lefttoe = 7; % top of the foot where the toe is
+leftheel = 4.5;% the heel 
+leftoutside = 2.5; % the outer part of the left foot
+leftinner = 1.5;  % the inner part of the left foot
 
-righttoe= 4;
-rightheel= 7;
-rightoutside = 2;  % the outer part of the right foot
-rightinner = 1.75; % the inner part of the right foot
+righttoe = 7;
+rightheel = 4.5;
+rightoutside = 2.5;  % the outer part of the right foot
+rightinner = 1.5; % the inner part of the right foot
 
-leftglute= 5; %left side of the sitting outline
+leftglute = 5; %left side of the sitting outline
 rightglute =5; %right side of the sitting outline
 
-leftknee=18; % knee offsets 
-rightknee=18; 
+leftknee = 18; % knee offsets 
+rightknee = 18; 
 
 topleft = [markerOne(:,1), markerOne(:,2)+ lefttoe];             
 bottomleft = [markerOne(:,1), markerOne(:,2)-leftheel];                  
-rightleft = [ markerOne(:,1)+leftoutside, markerOne(:,2)];        
-leftleft= [markerOne(:,1)-leftinner, markerOne(:,2)];         
+rightleft = [markerOne(:,1)+leftoutside, markerOne(:,2)];        
+leftleft = [markerOne(:,1)-leftinner, markerOne(:,2)];         
 
-topright=[markerThree(:,1), markerThree(:,2)+ righttoe];       
-bottomright=[markerThree(:,1), markerThree(:,2)- rightheel];
-rightright=[markerThree(:,1)-rightinner, markerThree(:,2)];
-leftright= [markerThree(:,1)+rightoutside, markerThree(:,2)];
+topright = [markerThree(:,1), markerThree(:,2)+ righttoe];       
+bottomright = [markerThree(:,1), markerThree(:,2)- rightheel];
+rightright = [markerThree(:,1)-rightinner, markerThree(:,2)];
+leftright = [markerThree(:,1)+rightoutside, markerThree(:,2)];
 
 sitleft = [markerTwo(:,1)+ leftglute, markerTwo(:,2)];         %offset for when they are sitting down
 sitright = [markerTwo(:,1)-rightglute, markerTwo(:,2)];
 
-kneeleftout= [markerOne(:,1)+1.5, markerOne(:,2)-leftknee]; %left knee outer point 
-kneerightout= [markerThree(:,1)-1.5, markerThree(:,2)-rightknee]; %right knee outer point 
+kneeleftout = [markerOne(:,1)+1.5, markerOne(:,2)-leftknee]; %left knee outer point 
+kneerightout = [markerThree(:,1)-1.5, markerThree(:,2)-rightknee]; %right knee outer point 
 
 % This loop applies alpha/yaw angle to offsets 
 for n= 1:totalFrames/3
-   topleft_new(n,1) = (((topleft(n,1)-markerOne(n,1))*cosd(R(n,1))) - ((topleft(n,2)-markerOne(n,2))*sind(R(n,1)))) + markerOne(n,1) ;
-   topleft_new(n,2) = (((topleft(n,1)-markerOne(n,1))*sind(R(n,1))) + ((topleft(n,2)-markerOne(n,2))*cosd(R(n,1)))) + markerOne(n,2) ;
-   bottomleft_new(n,1)= (((bottomleft(n,1)-markerOne(n,1))*cosd(R(n,1))) - ((bottomleft(n,2)-markerOne(n,2))*sind(R(n,1)))) + markerOne(n,1);
-   bottomleft_new(n,2)= (((bottomleft(n,1)-markerOne(n,1))*sind(R(n,1))) + ((bottomleft(n,2)-markerOne(n,2))*cosd(R(n,1)))) + markerOne(n,2) ;
-   rightleft_new(n,1) = (((rightleft(n,1)-markerOne(n,1))*cosd(R(n,1))) - ((rightleft(n,2)-markerOne(n,2))*sind(R(n,1)))) + markerOne(n,1);
-   rightleft_new(n,2)= (((rightleft(n,1)-markerOne(n,1))*sind(R(n,1))) + ((rightleft(n,2)-markerOne(n,2))*cosd(R(n,1)))) + markerOne(n,2) ;
-   leftleft_new(n,1)= (((leftleft(n,1)-markerOne(n,1))*cosd(R(n,1))) - ((leftleft(n,2)-markerOne(n,2))*sind(R(n,1)))) + markerOne(n,1);
-   leftleft_new(n,2)= (((leftleft(n,1)-markerOne(n,1))*sind(R(n,1))) + ((leftleft(n,2)-markerOne(n,2))*cosd(R(n,1)))) + markerOne(n,2) ;
+   topleft_new(n,1) = (((topleft(n,1)-markerOne(n,1))*cosd(a(n,1))) - ((topleft(n,2)-markerOne(n,2))*sind(a(n,1)))) + markerOne(n,1) ;
+   topleft_new(n,2) = (((topleft(n,1)-markerOne(n,1))*sind(a(n,1))) + ((topleft(n,2)-markerOne(n,2))*cosd(a(n,1)))) + markerOne(n,2) ;
+   bottomleft_new(n,1) = (((bottomleft(n,1)-markerOne(n,1))*cosd(a(n,1))) - ((bottomleft(n,2)-markerOne(n,2))*sind(a(n,1)))) + markerOne(n,1);
+   bottomleft_new(n,2) = (((bottomleft(n,1)-markerOne(n,1))*sind(a(n,1))) + ((bottomleft(n,2)-markerOne(n,2))*cosd(a(n,1)))) + markerOne(n,2) ;
+   rightleft_new(n,1) = (((rightleft(n,1)-markerOne(n,1))*cosd(a(n,1))) - ((rightleft(n,2)-markerOne(n,2))*sind(a(n,1)))) + markerOne(n,1);
+   rightleft_new(n,2) = (((rightleft(n,1)-markerOne(n,1))*sind(a(n,1))) + ((rightleft(n,2)-markerOne(n,2))*cosd(a(n,1)))) + markerOne(n,2) ;
+   leftleft_new(n,1) = (((leftleft(n,1)-markerOne(n,1))*cosd(a(n,1))) - ((leftleft(n,2)-markerOne(n,2))*sind(a(n,1)))) + markerOne(n,1);
+   leftleft_new(n,2) = (((leftleft(n,1)-markerOne(n,1))*sind(a(n,1))) + ((leftleft(n,2)-markerOne(n,2))*cosd(a(n,1)))) + markerOne(n,2) ;
    
-   topright_new(n,1) = (((topright(n,1)-markerThree(n,1))*cosd(S(n,1))) - ((topright(n,2)-markerThree(n,2))*sind(S(n,1)))) + markerThree(n,1)  ;
-   topright_new(n,2)= (((topright(n,1)-markerThree(n,1))*sind(S(n,1))) + ((topright(n,2)-markerThree(n,2))*cosd(S(n,1)))) +markerThree(n,2) ;
-   bottomright_new(n,1) =(((bottomright(n,1)-markerThree(n,1))*cosd(S(n,1))) - ((bottomright(n,2)-markerThree(n,2))*sind(S(n,1)))) + markerThree(n,1);
-   bottomright_new(n,2)= (((bottomright(n,1)-markerThree(n,1))*sind(S(n,1))) + ((bottomright(n,2)-markerThree(n,2))*cosd(S(n,1)))) +markerThree(n,2);
-   rightright_new(n,1)= (((rightright(n,1)-markerThree(n,1))*cosd(S(n,1))) - ((rightright(n,2)-markerThree(n,2))*sind(S(n,1)))) + markerThree(n,1);
-   rightright_new(n,2)= (((rightright(n,1)-markerThree(n,1))*sind(S(n,1))) + ((rightright(n,2)-markerThree(n,2))*cosd(S(n,1)))) +markerThree(n,2);
-   leftright_new(n,1)= (((leftright(n,1)-markerThree(n,1))*cosd(S(n,1))) - ((leftright(n,2)-markerThree(n,2))*sind(S(n,1)))) + markerThree(n,1);
-   leftright_new(n,2)= (((leftright(n,1)-markerThree(n,1))*sind(S(n,1))) + ((leftright(n,2)-markerThree(n,2))*cosd(S(n,1)))) +markerThree(n,2);
+   topright_new(n,1) = (((topright(n,1)-markerThree(n,1))*cosd(b(n,1))) - ((topright(n,2)-markerThree(n,2))*sind(b(n,1)))) + markerThree(n,1)  ;
+   topright_new(n,2) = (((topright(n,1)-markerThree(n,1))*sind(b(n,1))) + ((topright(n,2)-markerThree(n,2))*cosd(b(n,1)))) +markerThree(n,2) ;
+   bottomright_new(n,1) = (((bottomright(n,1)-markerThree(n,1))*cosd(b(n,1))) - ((bottomright(n,2)-markerThree(n,2))*sind(b(n,1)))) + markerThree(n,1);
+   bottomright_new(n,2) = (((bottomright(n,1)-markerThree(n,1))*sind(b(n,1))) + ((bottomright(n,2)-markerThree(n,2))*cosd(b(n,1)))) +markerThree(n,2);
+   rightright_new(n,1) = (((rightright(n,1)-markerThree(n,1))*cosd(b(n,1))) - ((rightright(n,2)-markerThree(n,2))*sind(b(n,1)))) + markerThree(n,1);
+   rightright_new(n,2) = (((rightright(n,1)-markerThree(n,1))*sind(b(n,1))) + ((rightright(n,2)-markerThree(n,2))*cosd(b(n,1)))) +markerThree(n,2);
+   leftright_new(n,1) = (((leftright(n,1)-markerThree(n,1))*cosd(b(n,1))) - ((leftright(n,2)-markerThree(n,2))*sind(b(n,1)))) + markerThree(n,1);
+   leftright_new(n,2) = (((leftright(n,1)-markerThree(n,1))*sind(b(n,1))) + ((leftright(n,2)-markerThree(n,2))*cosd(b(n,1)))) +markerThree(n,2);
     
-   sitleft_new(n,1) = (((sitleft(n,1)-markerTwo(n,1))*cosd(T(n,1))) - ((sitleft(n,2)-markerTwo(n,2))*sind(T(n,1)))) + markerTwo(n,1);
-   sitleft_new(n,2) = (((sitleft(n,1)-markerTwo(n,1))*sind(T(n,1))) + ((sitleft(n,2)-markerTwo(n,2))*cosd(T(n,1)))) +markerTwo(n,2) ;
-   sitright_new(n,1) = (((sitright(n,1)-markerTwo(n,1))*cosd(T(n,1))) - ((sitright(n,2)-markerTwo(n,2))*sind(T(n,1)))) + markerTwo(n,1);
-   sitright_new(n,2) =(((sitright(n,1)-markerTwo(n,1))*sind(T(n,1))) + ((sitright(n,2)-markerTwo(n,2))*cosd(T(n,1)))) +markerTwo(n,2) ;
+   sitleft_new(n,1) = (((sitleft(n,1)-markerTwo(n,1))*cosd(c(n,1))) - ((sitleft(n,2)-markerTwo(n,2))*sind(c(n,1)))) + markerTwo(n,1);
+   sitleft_new(n,2) = (((sitleft(n,1)-markerTwo(n,1))*sind(c(n,1))) + ((sitleft(n,2)-markerTwo(n,2))*cosd(c(n,1)))) +markerTwo(n,2) ;
+   sitright_new(n,1) = (((sitright(n,1)-markerTwo(n,1))*cosd(c(n,1))) - ((sitright(n,2)-markerTwo(n,2))*sind(c(n,1)))) + markerTwo(n,1);
+   sitright_new(n,2) =(((sitright(n,1)-markerTwo(n,1))*sind(c(n,1))) + ((sitright(n,2)-markerTwo(n,2))*cosd(c(n,1)))) +markerTwo(n,2) ;
  
-   kneeleftout_new(n,1)= (((kneeleftout(n,1)-markerOne(n,1))*cosd(R(n,1))) - ((kneeleftout(n,2)-markerOne(n,2))*sind(R(n,1)))) + markerOne(n,1) ;
-   kneeleftout_new(n,2)= (((kneeleftout(n,1)-markerOne(n,1))*sind(R(n,1))) + ((kneeleftout(n,2)-markerOne(n,2))*cosd(R(n,1)))) + markerOne(n,2) ;
+   kneeleftout_new(n,1)= (((kneeleftout(n,1)-markerOne(n,1))*cosd(a(n,1))) - ((kneeleftout(n,2)-markerOne(n,2))*sind(a(n,1)))) + markerOne(n,1) ;
+   kneeleftout_new(n,2)= (((kneeleftout(n,1)-markerOne(n,1))*sind(a(n,1))) + ((kneeleftout(n,2)-markerOne(n,2))*cosd(a(n,1)))) + markerOne(n,2) ;
  
-   kneerightout_new(n,1)=(((kneerightout(n,1)-markerThree(n,1))*cosd(S(n,1))) - ((kneerightout(n,2)-markerThree(n,2))*sind(S(n,1)))) + markerThree(n,1) ;
-   kneerightout_new(n,2)=(((kneerightout(n,1)-markerThree(n,1))*sind(S(n,1))) + ((kneerightout(n,2)-markerThree(n,2))*cosd(S(n,1)))) + markerThree(n,2) ;
+   kneerightout_new(n,1)=(((kneerightout(n,1)-markerThree(n,1))*cosd(b(n,1))) - ((kneerightout(n,2)-markerThree(n,2))*sind(b(n,1)))) + markerThree(n,1) ;
+   kneerightout_new(n,2)=(((kneerightout(n,1)-markerThree(n,1))*sind(b(n,1))) + ((kneerightout(n,2)-markerThree(n,2))*cosd(b(n,1)))) + markerThree(n,2) ;
    
    sacral= [markerTwo(n,1), markerTwo(n,2)];
 end
@@ -145,23 +145,23 @@ for k=1:totalFrames/3
     cla;
     grid on
     
-   topleft_new(k,1) = (((topleft(k,1)-markerOne(k,1))*cosd(R(k,1))) - ((topleft(k,2)-markerOne(k,2))*sind(R(k,1)))) + markerOne(k,1) ;
-   topleft_new(k,2) = (((topleft(k,1)-markerOne(k,1))*sind(R(k,1))) + ((topleft(k,2)-markerOne(k,2))*cosd(R(k,1)))) + markerOne(k,2) ;
-   bottomleft_new(k,1)= (((bottomleft(k,1)-markerOne(k,1))*cosd(R(k,1))) - ((bottomleft(k,2)-markerOne(k,2))*sind(R(k,1)))) + markerOne(k,1);
-   bottomleft_new(k,2)= (((bottomleft(k,1)-markerOne(k,1))*sind(R(k,1))) + ((bottomleft(k,2)-markerOne(k,2))*cosd(R(k,1)))) + markerOne(k,2) ;
-   rightleft_new(k,1) = (((rightleft(k,1)-markerOne(k,1))*cosd(R(k,1))) - ((rightleft(k,2)-markerOne(k,2))*sind(R(k,1)))) + markerOne(k,1);
-   rightleft_new(k,2)= (((rightleft(k,1)-markerOne(k,1))*sind(R(k,1))) + ((rightleft(k,2)-markerOne(k,2))*cosd(R(k,1)))) + markerOne(k,2) ;
-   leftleft_new(k,1)= (((leftleft(k,1)-markerOne(k,1))*cosd(R(k,1))) - ((leftleft(k,2)-markerOne(k,2))*sind(R(k,1)))) + markerOne(k,1);
-   leftleft_new(k,2)= (((leftleft(k,1)-markerOne(k,1))*sind(R(k,1))) + ((leftleft(k,2)-markerOne(k,2))*cosd(R(k,1)))) + markerOne(k,2) ;
+   topleft_new(k,1) = (((topleft(k,1)-markerOne(k,1))*cosd(a(k,1))) - ((topleft(k,2)-markerOne(k,2))*sind(a(k,1)))) + markerOne(k,1) ;
+   topleft_new(k,2) = (((topleft(k,1)-markerOne(k,1))*sind(a(k,1))) + ((topleft(k,2)-markerOne(k,2))*cosd(a(k,1)))) + markerOne(k,2) ;
+   bottomleft_new(k,1)= (((bottomleft(k,1)-markerOne(k,1))*cosd(a(k,1))) - ((bottomleft(k,2)-markerOne(k,2))*sind(a(k,1)))) + markerOne(k,1);
+   bottomleft_new(k,2)= (((bottomleft(k,1)-markerOne(k,1))*sind(a(k,1))) + ((bottomleft(k,2)-markerOne(k,2))*cosd(a(k,1)))) + markerOne(k,2) ;
+   rightleft_new(k,1) = (((rightleft(k,1)-markerOne(k,1))*cosd(a(k,1))) - ((rightleft(k,2)-markerOne(k,2))*sind(a(k,1)))) + markerOne(k,1);
+   rightleft_new(k,2)= (((rightleft(k,1)-markerOne(k,1))*sind(a(k,1))) + ((rightleft(k,2)-markerOne(k,2))*cosd(a(k,1)))) + markerOne(k,2) ;
+   leftleft_new(k,1)= (((leftleft(k,1)-markerOne(k,1))*cosd(a(k,1))) - ((leftleft(k,2)-markerOne(k,2))*sind(a(k,1)))) + markerOne(k,1);
+   leftleft_new(k,2)= (((leftleft(k,1)-markerOne(k,1))*sind(a(k,1))) + ((leftleft(k,2)-markerOne(k,2))*cosd(a(k,1)))) + markerOne(k,2) ;
    
-   topright_new(k,1) = (((topright(k,1)-markerThree(k,1))*cosd(S(k,1))) - ((topright(k,2)-markerThree(k,2))*sind(S(k,1)))) + markerThree(k,1)  ;
-   topright_new(k,2)= (((topright(k,1)-markerThree(k,1))*sind(S(k,1))) + ((topright(k,2)-markerThree(k,2))*cosd(S(k,1)))) +markerThree(k,2) ;
-   bottomright_new(k,1) =(((bottomright(k,1)-markerThree(k,1))*cosd(S(k,1))) - ((bottomright(k,2)-markerThree(k,2))*sind(S(k,1)))) + markerThree(k,1);
-   bottomright_new(k,2)= (((bottomright(k,1)-markerThree(k,1))*sind(S(k,1))) + ((bottomright(k,2)-markerThree(k,2))*cosd(S(k,1)))) +markerThree(k,2);
-   rightright_new(k,1)= (((rightright(k,1)-markerThree(k,1))*cosd(S(k,1))) - ((rightright(k,2)-markerThree(k,2))*sind(S(k,1)))) + markerThree(k,1);
-   rightright_new(k,2)= (((rightright(k,1)-markerThree(k,1))*sind(S(k,1))) + ((rightright(k,2)-markerThree(k,2))*cosd(S(k,1)))) +markerThree(k,2);
-   leftright_new(k,1)= (((leftright(k,1)-markerThree(k,1))*cosd(S(k,1))) - ((leftright(k,2)-markerThree(k,2))*sind(S(k,1)))) + markerThree(k,1);
-   leftright_new(k,2)= (((leftright(k,1)-markerThree(k,1))*sind(S(k,1))) + ((leftright(k,2)-markerThree(k,2))*cosd(S(k,1)))) +markerThree(k,2);
+   topright_new(k,1) = (((topright(k,1)-markerThree(k,1))*cosd(b(k,1))) - ((topright(k,2)-markerThree(k,2))*sind(b(k,1)))) + markerThree(k,1)  ;
+   topright_new(k,2)= (((topright(k,1)-markerThree(k,1))*sind(b(k,1))) + ((topright(k,2)-markerThree(k,2))*cosd(b(k,1)))) +markerThree(k,2) ;
+   bottomright_new(k,1) =(((bottomright(k,1)-markerThree(k,1))*cosd(b(k,1))) - ((bottomright(k,2)-markerThree(k,2))*sind(b(k,1)))) + markerThree(k,1);
+   bottomright_new(k,2)= (((bottomright(k,1)-markerThree(k,1))*sind(b(k,1))) + ((bottomright(k,2)-markerThree(k,2))*cosd(b(k,1)))) +markerThree(k,2);
+   rightright_new(k,1)= (((rightright(k,1)-markerThree(k,1))*cosd(b(k,1))) - ((rightright(k,2)-markerThree(k,2))*sind(b(k,1)))) + markerThree(k,1);
+   rightright_new(k,2)= (((rightright(k,1)-markerThree(k,1))*sind(b(k,1))) + ((rightright(k,2)-markerThree(k,2))*cosd(b(k,1)))) +markerThree(k,2);
+   leftright_new(k,1)= (((leftright(k,1)-markerThree(k,1))*cosd(b(k,1))) - ((leftright(k,2)-markerThree(k,2))*sind(b(k,1)))) + markerThree(k,1);
+   leftright_new(k,2)= (((leftright(k,1)-markerThree(k,1))*sind(b(k,1))) + ((leftright(k,2)-markerThree(k,2))*cosd(b(k,1)))) +markerThree(k,2);
 
     bos_x= [topleft_new(k,2),rightleft_new(k,2),bottomleft_new(k,2),bottomright_new(k,2),rightright_new(k,2),topright_new(k,2)];
     bos_y= [topleft_new(k,1),rightleft_new(k,1),bottomleft_new(k,1),bottomright_new(k,1),rightright_new(k,1),topright_new(k,1)];
@@ -317,4 +317,6 @@ end
     
     pause(.00000001)
     
-end
+end 
+
+
