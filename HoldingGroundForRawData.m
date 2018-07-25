@@ -1,36 +1,26 @@
-clear global
-%Make sure the arduino support package is installed
-global a;
-%Find COM port
-if ~isempty(instrfind);
-    fclose(instrfind);
-    delete(instrfind); 
-end
-%Make an object of arduino
-a=arduino();
-%Set time bounds
-Max = 50;
-%Set time interval
-InitialTime = 1;
-%Set initial time
-b=[];
-c=[];
-d=[];
-e=[];
+
 storage1 = [];
 storage2 = [];
 storage3 = [];
-%log=[];
-InitialTime = 1;
-%framevalues=[]
-while(InitialTime < Max)
-    b=[b;readVoltage(a,'A0')];
-    c=[c;readVoltage(a,'A1')];
-    d=[d;readVoltage(a,'A2')];
-    e=[e;readVoltage(a,'A3')];
-    data = g4client('127.0.0.1', 7234, .1);
-    totalFrames = size(data, 1);
-    %intialize the marker matrices
+
+%Set time bounds
+lefttoe = input('Distance from sensor to left toe: '); % top of the foot where the toe is
+leftheel = input('Distance from sensor to left heel: ');% the heel 
+leftoutside= input('Distance from sensor to the outside of the left foot: ') % the outer part of the left foot
+leftinner = ('Distance from sensor to the inside of the left foot: ');  % the inner part of the left foot
+
+righttoe = input('Distance from sensor to right toe');
+rightheel = input('Distance from sensor to right heel');
+rightoutside = input('Distance from sensor to outside of right foot');  % the outer part of the right foot
+rightinner = input('Distance from sensor to inside of right foot'); % the inner part of the right foot
+
+leftglute= 5; %left side of the sitting outline
+rightglute =5; %right side of the sitting outline
+
+leftknee=18; % knee offsets 
+rightknee=18; 
+
+%intialize the marker matrices
     markerOne = zeros(totalFrames/3, 6);
     markerTwo = zeros(totalFrames/3, 6);
     markerThree = zeros(totalFrames/3, 6);
@@ -64,7 +54,3 @@ while(InitialTime < Max)
     storage1 = [storage1;AVG1];
     storage2 = [storage2;AVG2];
     storage3 = [storage3;AVG3];
-    %log=[log;data];
-    %framevalues=[framevalues;size(data,1)];
-    InitialTime=InitialTime+1;
-end

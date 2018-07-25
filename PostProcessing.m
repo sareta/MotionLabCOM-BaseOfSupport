@@ -1,9 +1,60 @@
+%{
+lefttoe = input('Distance from sensor to left toe: '); % top of the foot where the toe is
+leftheel = input('Distance from sensor to left heel: ');% the heel 
+leftoutside= input('Distance from sensor to the outside of the left foot: '); % the outer part of the left foot
+leftinner = input('Distance from sensor to the inside of the left foot: ');  % the inner part of the left foot
 
-for i=1:199
-    R = (storage1(i,4)-90);   %alpha angle for left foot
-    S = (storage2(i,4)-90);   %alpha angle for right foot 
-    T = (storage3(i,4)-90);   %alpha angle for sacral marker
+righttoe = input('Distance from sensor to right toe: ');
+rightheel = input('Distance from sensor to right heel: ');
+rightoutside = input('Distance from sensor to outside of right foot: ');  % the outer part of the right foot
+rightinner = input('Distance from sensor to inside of right foot: '); % the inner part of the right foot
+%}
+lefttoe = 3.75;
+leftheel = 6.75; 
+leftoutside = 2.5;
+leftinner = 1.375;
+
+righttoe = 3.75;
+rightheel = 6.75;
+rightoutside = 2.5;
+rightinner = 1.375;
+for i=1:49
+    %{
+    R = (storage1(i,4)-0);   %alpha angle for left foot
+    S = (storage2(i,4)-0);   %alpha angle for right foot 
+    T = (storage3(i,4)-0);   %alpha angle for sacral marker
+    %}
     n=1;
+    
+    az1 = storage1(i,4);
+    el1 = storage1(i,5);
+    rol1= storage1(i,6);
+    az2 = storage2(i,4);
+    el2 = storage2(i,5);
+    rol2= storage2(i,6);
+    az3 = storage3(i,4);
+    el3 = storage3(i,5);
+    rol3= storage3(i,6);
+    
+    topleft_new(n,1) = storage1(i,1)+lefttoe*cosd(el1)*cosd(az1);
+    topleft_new(n,2) = storage1(i,2)+lefttoe*sind(az1);
+    bottomleft_new(n,1) = storage1(i,1)-leftheel*cosd(el1)*cosd(az1);
+    bottomleft_new(n,2) = storage1(i,2)-leftheel*sind(az1);
+    rightleft_new(n,1) = storage1(i,1)-leftinner*sind(az1);
+    rightleft_new(n,2) = storage1(i,2)+leftinner*cosd(rol1)*cosd(az1);
+    leftleft_new(n,1) = storage1(i,1)+leftoutside*sind(az1);
+    leftleft_new(n,2) = storage1(i,2)-leftoutside*cosd(az1)*cosd(rol1);
+    
+    topright_new(n,1) = storage3(i,1)+righttoe*cosd(el3)*cosd(az3);
+    topright_new(n,2)= storage3(i,2)+righttoe*sind(az3);
+    bottomright_new(n,1) = storage3(i,1)-leftheel*cosd(el3)*cosd(az3);
+    bottomright_new(n,2) = storage3(i,2)-leftheel*sind(az3);
+    rightright_new(n,1) = storage3(i,1)-leftinner*sind(az3);
+    rightright_new(n,2) = storage3(i,2)+leftinner*cosd(rol3)*cosd(az3);
+    leftright_new(n,1) = storage3(i,1)+leftoutside*sind(az3);
+    leftright_new(n,2) = storage3(i,2)-leftoutside*cosd(az3)*cosd(rol3);
+    %}
+    %{
     topleft = [storage1(i,1), storage1(i,2)+ lefttoe];             
     bottomleft = [storage1(i,1), storage1(i,2)-leftheel];                  
     rightleft = [ storage1(i,1)+leftoutside, storage1(i,2)];        
@@ -37,8 +88,9 @@ for i=1:199
     rightright_new(n,2)= (((rightright(n,1)-storage3(i,1))*sind(S)) + ((rightright(n,2)-storage3(i,2))*cosd(S))) +storage3(i,2);
     leftright_new(n,1)= (((leftright(n,1)-storage3(i,1))*cosd(S)) - ((leftright(n,2)-storage3(i,2))*sind(S))) + storage3(i,1);
     leftright_new(n,2)= (((leftright(n,1)-storage3(i,1))*sind(S)) + ((leftright(n,2)-storage3(i,2))*cosd(S))) +storage3(i,2);
+ %}
     
-    sacral= [storage2(i,1),storage2(i,2)];
+    sacral= [storage2(i,1)+1.2*cosd(el2)*sind(az2)+6*sind(el2)*cosd(rol2),storage2(i,2)+1.2*sind(az2)*cosd(el2)+6*sind(el2)*cosd(rol2)];
     
     if 1000*b(i,1) > LToeMin
         LT=3;
@@ -126,20 +178,27 @@ for i=1:199
         fprintf('\n')
         fprintf('Your feet are not detected')
     end
-    xv=XValues([2:end 1]);
-    yv=YValues([2:end 1]);
-    aa = XValues.*yv - xv.*YValues; 
-    A = sum( aa ) /2;
-    xc = sum( (XValues+xv).*aa  ) /6/A;
-    yc = sum( (YValues+yv).*aa  ) /6/A;
     plot(XValues,YValues,'m*')
-    fill(XValues,YValues,'c')
     hold on
-    plot(xc,yc,'b+',sacral(1),sacral(2),'ro')
-    hold off 
+    plot(sacral(1),sacral(2),'ro',storage2(i,1),storage2(i,2),'ko')
+    if position > 0
+        xv=XValues([2:end 1]);
+        yv=YValues([2:end 1]);
+        aa = XValues.*yv - xv.*YValues; 
+        A = sum( aa ) /2;
+        xc = sum( (XValues+xv).*aa  ) /6/A;
+        yc = sum( (YValues+yv).*aa  ) /6/A;
+        fill(XValues,YValues,'c')
+        hold on
+        plot(xc,yc,'b+')
+    else
+        xc=0;
+        yc=0;
+    end 
     grid ON
-    xlim ([-50 50])  % can change the limits of the graph once larger area is being used 
-    ylim ([-150 50]) 
+    hold off
+    xlim ([-210 0])  % can change the limits of the graph once larger area is being used 
+    ylim ([-40 60]) 
     drawnow;
-    pause(.5)
+    pause(.1)
 end
