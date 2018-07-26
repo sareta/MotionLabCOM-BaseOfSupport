@@ -5,7 +5,7 @@ hold on
 scatter3(storage2(:,1),storage2(:,2),storage2(:,3))
 hold on 
 scatter3(storage3(:,1),storage3(:,2),storage3(:,3))
-%}
+
 lefttoe = 3.75;
 leftheel = 6.75; 
 leftoutside = 2.5;
@@ -55,3 +55,7 @@ plot(XValues,YValues,'m*')
 fill(XValues,YValues,'c')
 hold on 
 plot(sacral(1),sacral(2),'ro',pos2(i,1),pos2(i,2),'ko')
+%}
+for i=1:1:49
+    storage2(i,1)=storage2(i,1)-1;
+end
