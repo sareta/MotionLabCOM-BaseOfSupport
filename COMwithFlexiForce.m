@@ -1,3 +1,20 @@
+%{
+By: Siniva Areta
+This code is basically a combination of 'RawDataCollection.m' and
+'PostProcessing.m'. It takes the last .1 sec of Polhemus data, a voltage
+reading from each flexiforce, and graphs it in the same loop. The problem
+with this code is that because it is doing so much during each loop, the
+timing is disjointed and the animation often doesn't make much sense. That
+is the reason we switched to two codes, one for collecting data and the
+other for processing it after it has been collected. 
+
+*NOTE: If you are a CS major or very proficient in code efficiency, this
+code has the potential to be very useful if time per loop could be
+durastically decreased. In other words, if this code could perform in real
+time and not be disjointed, it'd be a huge improvement from the current
+system. 
+%}
+
 clear global
 %Make sure the arduino support package is installed
 global a;
@@ -18,34 +35,15 @@ x = 0;
 y = 0;
 z = 0;
 %Foot Measurements
-%Total Length
-%{
-length=input('Foot Length (Toe to Heel) in inches')
-width=input('Foot Width (Sesamod bone 1 to 5) in inches')
-minorlength=input('Minor Foot Length (Sesamod bone 1 to Toe -vertical) in inches')
-minorwidth=input('Minor Foot Width (Sesamod bone 1 to Toe -horizontal) in inches')
-ToeAndHeelx=1+minorwidth;
-Lateralx=1+width;
-LateralAndMedialy=length-minorlength;
-n=1
-topright_new=[2 10];
-topleft_new=[-2 10];
-leftleft_new=[-4 7];
-leftright_new=[-1 7];
-bottomright_new=[2 0];
-bottomleft_new=[-2 0];
-rightleft_new=[1 7];
-rightright_new=[4 7];
-%}
-lefttoe= 7.5; % top of the foot where the toe is
-leftheel= 5;% the heel 
-leftoutside= 2.5; % the outer part of the left foot
-leftinner= 2;  % the inner part of the left foot
+lefttoe= 7.5; % sensor to top of the foot where the toe is
+leftheel= 5;% sensor to the heel 
+leftoutside= 2.5; % sensor to the outer part of the left foot
+leftinner= 2;  %sensor to the inner part of the left foot
 
-righttoe= 7.5;
-rightheel= 5;
-rightoutside = 2.5;  % the outer part of the right foot
-rightinner = 2; % the inner part of the right foot
+righttoe= 7.5; %sensor to right toe
+rightheel= 5; %sensor to right heel
+rightoutside = 2.5;  %sensor to the outer part of the right foot
+rightinner = 2; %sensor to the inner part of the right foot
 
 leftglute= 5; %left side of the sitting outline
 rightglute =5; %right side of the sitting outline
@@ -58,7 +56,7 @@ storage2 = [];
 storage3 = [];
 
 while(InitialTime < Max)
-    data = g4client('127.0.0.1', 7234, .2);
+    data = g4client('127.0.0.1', 7234, .1);
     totalFrames = size(data, 1);
 
     %intialize the marker matrices
@@ -248,10 +246,10 @@ while(InitialTime < Max)
     fill(XValues,YValues,'c')
     hold on
     plot(xc,yc,'b+',sacral(1),sacral(2),'ro')
-    hold off 
     grid ON
     xlim ([-120 120])  % can change the limits of the graph once larger area is being used 
     ylim ([-120 50]) 
     InitialTime = InitialTime +1;
     drawnow;
+    hold off 
 end

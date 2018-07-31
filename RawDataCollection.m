@@ -9,7 +9,7 @@ end
 %Make an object of arduino
 a=arduino();
 %Set time bounds
-Max = 75;
+Max = 50;
 %Set time interval
 InitialTime = 1;
 %Set initial time
@@ -17,7 +17,7 @@ b=[];
 c=[];
 d=[];
 e=[];
-%{
+
 storage1 = [];
 storage2 = [];
 storage3 = [];
@@ -30,7 +30,6 @@ while(InitialTime < Max)
     c=[c;readVoltage(a,'A1')];
     d=[d;readVoltage(a,'A2')];
     e=[e;readVoltage(a,'A3')];
-    %{
     data = g4client('127.0.0.1', 7234, .1);
     totalFrames = size(data, 1);
     %intialize the marker matrices
@@ -72,3 +71,13 @@ while(InitialTime < Max)
 %}    
 InitialTime=InitialTime+1;
 end
+
+storage1(:,1)=storage1(:,1)/2.54;
+storage1(:,2)=storage1(:,2)/2.54;
+storage1(:,3)=storage1(:,3)/2.54;
+storage2(:,1)=storage2(:,1)/2.54;
+storage2(:,2)=storage2(:,2)/2.54;
+storage2(:,3)=storage2(:,3)/2.54;
+storage3(:,1)=storage3(:,1)/2.54;
+storage3(:,2)=storage3(:,2)/2.54;
+storage3(:,3)=storage3(:,3)/2.54;

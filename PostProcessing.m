@@ -1,4 +1,12 @@
 %{
+By: Siniva Areta
+This code takes data collected from the code 'RawDataCollection.m' and
+processes it into an animation. 
+%}
+
+%This portion of the code asks the user for the measurements that are used
+%to locate positions of the feet (L/R Toes, L/R Heels, LR Sides). 
+%{
 lefttoe = input('Distance from sensor to left toe: '); % top of the foot where the toe is
 leftheel = input('Distance from sensor to left heel: ');% the heel 
 leftoutside= input('Distance from sensor to the outside of the left foot: '); % the outer part of the left foot
@@ -9,34 +17,37 @@ rightheel = input('Distance from sensor to right heel: ');
 rightoutside = input('Distance from sensor to outside of right foot: ');  % the outer part of the right foot
 rightinner = input('Distance from sensor to inside of right foot: '); % the inner part of the right foot
 %}
-%{
-storage1(:,1)=storage1(:,1)/2.54;
-storage1(:,2)=storage1(:,2)/2.54;
-storage1(:,3)=storage1(:,3)/2.54;
-storage2(:,1)=storage2(:,1)/2.54;
-storage2(:,2)=storage2(:,2)/2.54;
-storage2(:,3)=storage2(:,3)/2.54;
-storage3(:,1)=storage3(:,1)/2.54;
-storage3(:,2)=storage3(:,2)/2.54;
-storage3(:,3)=storage3(:,3)/2.54;
-%}
-lefttoe = 3.75;
-leftheel = 6.75; 
-leftoutside = 2.5;
-leftinner = 1.375;
+%This portion of the code works if you're processing data from the same
+%person. This allows you to put in the values without doing the input every
+%time. Note that the description of the distances can be found in the guide
+%as well as in the input calls.
+lefttoe = 2.651;
+leftheel = 8.584; 
+leftoutside = 2.225;
+leftinner = 1.865;
 
-righttoe = 3.75;
-rightheel = 6.75;
-rightoutside = 2.5;
-rightinner = 1.375;
-for i=1:74
-    %{
-    R = (storage1(i,4)-0);   %alpha angle for left foot
-    S = (storage2(i,4)-0);   %alpha angle for right foot 
-    T = (storage3(i,4)-0);   %alpha angle for sacral marker
-    %}
-    n=1;
-    
+righttoe = 3.046;
+rightheel = 8.248;
+rightoutside = 2.059;
+rightinner = 2.148;
+
+bottomright_new=[];
+topright_new=[];
+rightright_new=[];
+leftright_new=[];
+bottomleft_new=[];
+topleft_new=[];
+rightleft_new=[];
+leftleft_new=[];
+
+%This creates a for loop that creates frames in the animation for each of
+%the captures. It finds the size of your capture using the storage values
+%from 'RawDataCollection.m'
+for i=1:size(storage1,1)
+    %This creates variables to call for the Euler orientation angles for 
+    %each sensor for each frame. Each angle has an abreviation of the angle 
+    %followed by the number of the sensor it refers to.
+    %az=Azimuth (+x to +y), el=Elevation (+z to +x), rol=Roll (+y to +z) 
     az1 = storage1(i,4);
     el1 = storage1(i,5);
     rol1= storage1(i,6);
@@ -47,62 +58,51 @@ for i=1:74
     el3 = storage3(i,5);
     rol3= storage3(i,6);
     
-    topleft_new(n,1) = storage1(i,1)+lefttoe*cosd(el1)*cosd(az1);
-    topleft_new(n,2) = storage1(i,2)+lefttoe*sind(az1);
-    bottomleft_new(n,1) = storage1(i,1)-leftheel*cosd(el1)*cosd(az1);
-    bottomleft_new(n,2) = storage1(i,2)-leftheel*sind(az1);
-    rightleft_new(n,1) = storage1(i,1)-leftinner*sind(az1);
-    rightleft_new(n,2) = storage1(i,2)+leftinner*cosd(rol1)*cosd(az1);
-    leftleft_new(n,1) = storage1(i,1)+leftoutside*sind(az1);
-    leftleft_new(n,2) = storage1(i,2)-leftoutside*cosd(az1)*cosd(rol1);
+    %This creates XY coordinates for each point of interest in the foot. It
+    %relies on the location of the sensors' electromagnetic center as well
+    %as the angles that describe the relationship between the coordinate
+    %reference frames of the sources and the sensors. When these matricies
+    %are complete, the row number will identify the frame, column 1 will be
+    %the x position, and column 2 will be the y position. 
+    topleft_new(i,1) = storage1(i,1)+lefttoe*cosd(el1)*cosd(az1);
+    topleft_new(i,2) = storage1(i,2)+lefttoe*cosd(el1)*sind(az1);
+    bottomleft_new(i,1) = storage1(i,1)-leftheel*cosd(el1)*cosd(az1);
+    bottomleft_new(i,2) = storage1(i,2)-leftheel*sind(az1)*cosd(el1);
+    %Note: Because the toe and heel are alligned with the x direction of 
+    %the sensor, the roll angle does not effect the XY location of the toe
+    %and heel.
+    rightleft_new(i,1) = storage1(i,1)-leftinner*cosd(rol1)*sind(az1);
+    rightleft_new(i,2) = storage1(i,2)+leftinner*cosd(rol1)*cosd(az1);
+    leftleft_new(i,1) = storage1(i,1)+leftoutside*cosd(rol1)*sind(az1);
+    leftleft_new(i,2) = storage1(i,2)-leftoutside*cosd(az1)*cosd(rol1);
+    %Note: Because the sides of the foot are alligned with the y direction 
+    %of the sensor, the elevation angle does not effect the XY location of 
+    %the toe and heel.
     
-    topright_new(n,1) = storage3(i,1)+righttoe*cosd(el3)*cosd(az3);
-    topright_new(n,2)= storage3(i,2)+righttoe*sind(az3);
-    bottomright_new(n,1) = storage3(i,1)-leftheel*cosd(el3)*cosd(az3);
-    bottomright_new(n,2) = storage3(i,2)-leftheel*sind(az3);
-    rightright_new(n,1) = storage3(i,1)-leftinner*sind(az3);
-    rightright_new(n,2) = storage3(i,2)+leftinner*cosd(rol3)*cosd(az3);
-    leftright_new(n,1) = storage3(i,1)+leftoutside*sind(az3);
-    leftright_new(n,2) = storage3(i,2)-leftoutside*cosd(az3)*cosd(rol3);
-    %}
-    %{
-    topleft = [storage1(i,1), storage1(i,2)+ lefttoe];             
-    bottomleft = [storage1(i,1), storage1(i,2)-leftheel];                  
-    rightleft = [ storage1(i,1)+leftoutside, storage1(i,2)];        
-    leftleft= [storage1(i,1)-leftinner, storage1(i,2)];         
+    topright_new(i,1) = storage3(i,1)+righttoe*cosd(el3)*cosd(az3);
+    topright_new(i,2)= storage3(i,2)+righttoe*cosd(el3)*sind(az3);
+    bottomright_new(i,1) = storage3(i,1)-leftheel*cosd(el3)*cosd(az3);
+    bottomright_new(i,2) = storage3(i,2)-leftheel*cosd(el3)*sind(az3);
+    rightright_new(i,1) = storage3(i,1)-leftinner*cosd(rol3)*sind(az3);
+    rightright_new(i,2) = storage3(i,2)+leftinner*cosd(rol3)*cosd(az3);
+    leftright_new(i,1) = storage3(i,1)+leftoutside*cosd(rol3)*sind(az3);
+    leftright_new(i,2) = storage3(i,2)-leftoutside*cosd(az3)*cosd(rol3);
+    %The right foot has nearly all of the same angular principles as the
+    %left foot. See diagram in guide for assistance. 
     
-    topright=[storage3(i,1), storage3(i,2)+ righttoe];       
-    bottomright=[storage3(i,1), storage3(i,2)- rightheel];
-    rightright=[storage3(i,1)-rightinner, storage3(i,2)];
-    leftright= [storage3(i,1)+rightoutside, storage3(i,2)];
+    sacral(i,1) = storage2(i,1)+6*sind(el2)*cosd(az2);
+    sacral(i,2) = storage2(i,2)+6*sind(el2)*sind(az2);
+    %The center of mass is located using the location of the sacral marker
+    %(storage2(i,1) and storage2(i,2) and the offset is incorporated with
+    %the other part. The offset is in the positive z direction on the
+    %sensors and is then translated to X,Y coordinates of the source using
+    %angles and trigonometry.
     
-    sitleft = [storage2(i,1)+ leftglute, storage2(i,2)];         %offset for when they are sitting down
-    sitright = [storage2(i,1)-rightglute, storage2(i,2)];
-    
-    kneeleftout= [storage1(i,1)+1.5, storage1(i,2)-leftknee]; %left knee outer point 
-    kneerightout= [storage3(i,1)-1.5, storage3(i,2)-rightknee]; %right knee outer point 
-    
-    topleft_new(n,1) = (((topleft(n,1)-storage1(i,1))*cosd(R)) - ((topleft(n,2)-storage1(i,2))*sind(R))) + storage1(i,1) ;
-    topleft_new(n,2) = (((topleft(n,1)-storage1(i,1))*sind(R)) + ((topleft(n,2)-storage1(i,2))*cosd(R))) + storage1(i,2) ;
-    bottomleft_new(n,1) = (((bottomleft(n,1)-storage1(i,1))*cosd(R)) - ((bottomleft(n,2)-storage1(i,2))*sind(R))) +storage1(i,1);
-    bottomleft_new(n,2) = (((bottomleft(n,1)-storage1(i,1))*sind(R)) + ((bottomleft(n,2)-storage1(i,2))*cosd(R))) + storage1(i,2) ;
-    rightleft_new(n,1) = (((rightleft(n,1)-storage1(i,1))*cosd(R)) - ((rightleft(n,2)-storage1(i,2))*sind(R))) + storage1(i,1);
-    rightleft_new(n,2) = (((rightleft(n,1)-storage1(i,1))*sind(R)) + ((rightleft(n,2)-storage1(i,2))*cosd(R))) + storage1(i,2) ;
-    leftleft_new(n,1) = (((leftleft(n,1)-storage1(i,1))*cosd(R)) - ((leftleft(n,2)-storage1(i,2))*sind(R))) + storage1(i,1);
-    leftleft_new(n,2) = (((leftleft(n,1)-storage1(i,1))*sind(R)) + ((leftleft(n,2)-storage1(i,2))*cosd(R))) + storage1(i,2) ;
-    
-    topright_new(n,1) = (((topright(n,1)-storage3(i,1))*cosd(S)) - ((topright(n,2)-storage3(i,2))*sind(S))) + storage3(i,1)  ;
-    topright_new(n,2)= (((topright(n,1)-storage3(i,1))*sind(S)) + ((topright(n,2)-storage3(i,2))*cosd(S))) +storage3(i,2) ;
-    bottomright_new(n,1) =(((bottomright(n,1)-storage3(i,1))*cosd(S)) - ((bottomright(n,2)-storage3(i,2))*sind(S))) + storage3(i,1);
-    bottomright_new(n,2)= (((bottomright(n,1)-storage3(i,1))*sind(S)) + ((bottomright(n,2)-storage3(i,2))*cosd(S))) +storage3(i,2);
-    rightright_new(n,1)= (((rightright(n,1)-storage3(i,1))*cosd(S)) - ((rightright(n,2)-storage3(i,2))*sind(S))) + storage3(i,1);
-    rightright_new(n,2)= (((rightright(n,1)-storage3(i,1))*sind(S)) + ((rightright(n,2)-storage3(i,2))*cosd(S))) +storage3(i,2);
-    leftright_new(n,1)= (((leftright(n,1)-storage3(i,1))*cosd(S)) - ((leftright(n,2)-storage3(i,2))*sind(S))) + storage3(i,1);
-    leftright_new(n,2)= (((leftright(n,1)-storage3(i,1))*sind(S)) + ((leftright(n,2)-storage3(i,2))*cosd(S))) +storage3(i,2);
- %}
-    
-    sacral= [storage2(i,1)+1.2*cosd(el2)*sind(az2)+6*sind(el2)*cosd(rol2),storage2(i,2)+1.2*sind(az2)*cosd(el2)+6*sind(az2)*cosd(rol2)];
-    
+    %This portion calls the data from the flexiforce and assigns an on or
+    %off value to the variables based on if enough force is being put on
+    %that sensor to constitute declaring it to be 'on'. If a toe is 'on'
+    %its value will be set to 3. If a heel is 'on', its value will be set
+    %to 1. If the heels or toes are 'off', their value will be set to 0.
     if 1000*b(i,1) > LToeMin
         LT=3;
     else
@@ -124,73 +124,129 @@ for i=1:74
         RH=0;
     end
     position=LT+LH+RT+RH;
-    if position==8
-        XValues = [bottomleft_new(n,1) leftleft_new(n,1) topleft_new(n,1) topright_new(n,1) rightright_new(n,1) bottomright_new(n,1) bottomleft_new(n,1)];
-        YValues = [bottomleft_new(n,2) leftleft_new(n,2) topleft_new(n,2) topright_new(n,2) rightright_new(n,2) bottomright_new(n,2) bottomleft_new(n,2)];
+    %Using the logic of the values, I created a series of if statments that
+    %find which configuration the feet are in based on the values of the
+    %flexiforce. The code then makes a polygon of the base of support. The
+    %details of what points determine the base of support can be found in
+    %Ryan Kulwicki's Guide. The line 'set(h,'facealpha',.5)' sets the
+    %opacity to 0.5.
+    if position==8 %Both Feet on the ground
+        XValues = [bottomleft_new(i,1) leftleft_new(i,1) topleft_new(i,1) topright_new(i,1) rightright_new(i,1) bottomright_new(i,1) bottomleft_new(i,1)];
+        YValues = [bottomleft_new(i,2) leftleft_new(i,2) topleft_new(i,2) topright_new(i,2) rightright_new(i,2) bottomright_new(i,2) bottomleft_new(i,2)];
+        h=fill(XValues,YValues,'k');
+        set(h,'facealpha',.5);
+        hold on
     elseif position==7
-        if LH==1
-            XValues = [bottomleft_new(n,1) leftleft_new(n,1) topleft_new(n,1) topright_new(n,1) rightright_new(n,1) leftright_new(n,1) bottomleft_new(n,1)];
-            YValues = [bottomleft_new(n,2) leftleft_new(n,2) topleft_new(n,2) topright_new(n,2) rightright_new(n,2) leftright_new(n,2) bottomleft_new(n,2)];
-        else
-            XValues = [leftright_new(n,1) leftleft_new(n,1) topleft_new(n,1) topright_new(n,1) rightright_new(n,1) bottomright_new(n,1) rightleft_new(n,1)];
-            YValues = [leftright_new(n,2) leftleft_new(n,2) topleft_new(n,2) topright_new(n,2) rightright_new(n,2) bottomright_new(n,2) rightleft_new(n,2)];
+        if LH==1 %Left foot and right toe
+            XValues = [bottomleft_new(i,1) leftleft_new(i,1) topleft_new(i,1) topright_new(i,1) rightright_new(i,1) leftright_new(i,1) bottomleft_new(i,1)];
+            YValues = [bottomleft_new(i,2) leftleft_new(i,2) topleft_new(i,2) topright_new(i,2) rightright_new(i,2) leftright_new(i,2) bottomleft_new(i,2)];
+            h=fill(XValues,YValues,'w');
+            set(h,'facealpha',.5);
+            hold on
+        else %right foot and left toe
+            XValues = [leftright_new(i,1) leftleft_new(i,1) topleft_new(i,1) topright_new(i,1) rightright_new(i,1) bottomright_new(i,1) rightleft_new(i,1)];
+            YValues = [leftright_new(i,2) leftleft_new(i,2) topleft_new(i,2) topright_new(i,2) rightright_new(i,2) bottomright_new(i,2) rightleft_new(i,2)];
+            h=fill(XValues,YValues,'w');
+            set(h,'facealpha',.5);
+            hold on
         end
-    elseif position == 6
-        XValues = [leftleft_new(n,1) topleft_new(n,1) topright_new(n,1) rightright_new(n,1) leftright_new(n,1) rightleft_new(n,1) leftleft_new(n,1)];
-        YValues = [leftleft_new(n,2) topleft_new(n,2) topright_new(n,2) rightright_new(n,2) leftright_new(n,2) rightleft_new(n,2) leftleft_new(n,2)];
-    elseif position == 5
-        if LT == 3
-            XValues = [bottomleft_new(n,1) leftleft_new(n,1) topleft_new(n,1) rightleft_new(n,1) leftright_new(n,1) rightright_new(n,1) bottomright_new(n,1) bottomleft_new(n,1)];
-            YValues = [bottomleft_new(n,2) leftleft_new(n,2) topleft_new(n,2) rightleft_new(n,2) leftright_new(n,2) rightright_new(n,2) bottomright_new(n,2) bottomleft_new(n,2)];
-        else
-            XValues = [bottomleft_new(n,1) leftleft_new(n,1) rightleft_new(n,1) leftright_new(n,1) topright_new(n,1) rightright_new(n,1) bottomright_new(n,1) bottomleft_new(n,1)];
-            YValues = [bottomleft_new(n,2) leftleft_new(n,2) rightleft_new(n,2) leftright_new(n,2) topright_new(n,2) rightright_new(n,2) bottomright_new(n,2) bottomleft_new(n,2)];
+    elseif position == 6 %Both toes
+        XValues = [leftleft_new(i,1) topleft_new(i,1) topright_new(i,1) rightright_new(i,1) leftright_new(i,1) rightleft_new(i,1) leftleft_new(i,1)];
+        YValues = [leftleft_new(i,2) topleft_new(i,2) topright_new(i,2) rightright_new(i,2) leftright_new(i,2) rightleft_new(i,2) leftleft_new(i,2)];
+        h=fill(XValues,YValues,'g');
+        set(h,'facealpha',.5);
+        hold on
+    elseif position == 5 
+        if LT == 3 %Left foot and right heel
+            XValues = [bottomleft_new(i,1) leftleft_new(i,1) topleft_new(i,1) rightleft_new(i,1) leftright_new(i,1) rightright_new(i,1) bottomright_new(i,1) bottomleft_new(i,1)];
+            YValues = [bottomleft_new(i,2) leftleft_new(i,2) topleft_new(i,2) rightleft_new(i,2) leftright_new(i,2) rightright_new(i,2) bottomright_new(i,2) bottomleft_new(i,2)];
+            h=fill(XValues,YValues,'m');
+            set(h,'facealpha',.5);
+            hold on
+        else %Right foot and left heel
+            XValues = [bottomleft_new(i,1) leftleft_new(i,1) rightleft_new(i,1) leftright_new(i,1) topright_new(i,1) rightright_new(i,1) bottomright_new(i,1) bottomleft_new(i,1)];
+            YValues = [bottomleft_new(i,2) leftleft_new(i,2) rightleft_new(i,2) leftright_new(i,2) topright_new(i,2) rightright_new(i,2) bottomright_new(i,2) bottomleft_new(i,2)];
+            h=fill(XValues,YValues,'m');
+            set(h,'facealpha',.5);
+            hold on
         end
     elseif position == 4
         if RT == 3 
-            if RH == 1
-                XValues = [bottomright_new(n,1) leftright_new(n,1) topright_new(n,1) rightright_new(n,1) bottomright_new(n,1)];
-                YValues = [bottomright_new(n,2) leftright_new(n,2) topright_new(n,2) rightright_new(n,2) bottomright_new(n,2)];
-            else
-                XValues = [bottomleft_new(n,1) leftleft_new(n,1) rightleft_new(n,1) topright_new(n,1) rightright_new(n,1) leftright_new(n,1) bottomleft_new(n,1)];
-                YValues = [bottomleft_new(n,2) leftleft_new(n,2) rightleft_new(n,2) topright_new(n,2) rightright_new(n,2) leftright_new(n,2) bottomleft_new(n,2)];
+            if RH == 1 %Right foot only
+                XValues = [bottomright_new(i,1) leftright_new(i,1) topright_new(i,1) rightright_new(i,1) bottomright_new(i,1)];
+                YValues = [bottomright_new(i,2) leftright_new(i,2) topright_new(i,2) rightright_new(i,2) bottomright_new(i,2)];
+                h=fill(XValues,YValues,'c');
+                set(h,'facealpha',.5);
+                hold on
+            else %Right toe, left heel
+                XValues = [bottomleft_new(i,1) leftleft_new(i,1) rightleft_new(i,1) topright_new(i,1) rightright_new(i,1) leftright_new(i,1) bottomleft_new(i,1)];
+                YValues = [bottomleft_new(i,2) leftleft_new(i,2) rightleft_new(i,2) topright_new(i,2) rightright_new(i,2) leftright_new(i,2) bottomleft_new(i,2)];
+                h=fill(XValues,YValues,'y');
+                set(h,'facealpha',.5);
+                hold on
             end
         else
-            if LH == 1
-                XValues = [bottomleft_new(n,1) leftleft_new(n,1) topleft_new(n,1) rightleft_new(n,1) bottomleft_new(n,1)];
-                YValues = [bottomleft_new(n,2) leftleft_new(n,2) topleft_new(n,2) rightleft_new(n,2) bottomleft_new(n,2)];
-            else
-                XValues = [rightleft_new(n,1) leftleft_new(n,1) topleft_new(n,1) leftright_new(n,1) rightright_new(n,1) bottomright_new(n,1) rightleft_new(n,1)];
-                YValues = [rightleft_new(n,2) leftleft_new(n,2) topleft_new(n,2) leftright_new(n,2) rightright_new(n,2) bottomright_new(n,2) rightleft_new(n,2)];
+            if LH == 1 %Left foot only
+                XValues = [bottomleft_new(i,1) leftleft_new(i,1) topleft_new(i,1) rightleft_new(i,1) bottomleft_new(i,1)];
+                YValues = [bottomleft_new(i,2) leftleft_new(i,2) topleft_new(i,2) rightleft_new(i,2) bottomleft_new(i,2)];
+                h=fill(XValues,YValues,'c');
+                set(h,'facealpha',.5);
+                hold on
+            else %Left toe, right heel
+                XValues = [rightleft_new(i,1) leftleft_new(i,1) topleft_new(i,1) leftright_new(i,1) rightright_new(i,1) bottomright_new(i,1) rightleft_new(i,1)];
+                YValues = [rightleft_new(i,2) leftleft_new(i,2) topleft_new(i,2) leftright_new(i,2) rightright_new(i,2) bottomright_new(i,2) rightleft_new(i,2)];
+                h=fill(XValues,YValues,'y');
+                set(h,'facealpha',.5);
+                hold on
             end
         end
     elseif position == 3
-        if RT == 3
-            XValues = [leftright_new(n,1) topright_new(n,1) rightright_new(n,1) leftright_new(n,1)];
-            YValues = [leftright_new(n,2) topright_new(n,2) rightright_new(n,2) leftright_new(n,2)];
-        else
-            XValues = [leftleft_new(n,1) topleft_new(n,1) rightleft_new(n,1) leftleft_new(n,1)];
-            YValues = [leftleft_new(n,2) topleft_new(n,2) rightleft_new(n,2) leftleft_new(n,2)];
+        if RT == 3 %Right toe only
+            XValues = [leftright_new(i,1) topright_new(i,1) rightright_new(i,1) leftright_new(i,1)];
+            YValues = [leftright_new(i,2) topright_new(i,2) rightright_new(i,2) leftright_new(i,2)];
+            h=fill(XValues,YValues,'b');
+            set(h,'facealpha',.5);
+            hold on
+        else %Left toe only
+            XValues = [leftleft_new(i,1) topleft_new(i,1) rightleft_new(i,1) leftleft_new(i,1)];
+            YValues = [leftleft_new(i,2) topleft_new(i,2) rightleft_new(i,2) leftleft_new(i,2)];
+            h=fill(XValues,YValues,'b');
+            set(h,'facealpha',.5);
+            hold on
         end
-    elseif position == 2
-        XValues = [bottomleft_new(n,1) leftleft_new(n,1) rightleft_new(n,1) leftright_new(n,1) rightright_new(n,1) bottomright_new(n,1) bottomleft_new(n,1)];
-        YValues = [bottomleft_new(n,2) leftleft_new(n,2) rightleft_new(n,2) leftright_new(n,2) rightright_new(n,2) bottomright_new(n,2) bottomleft_new(n,2)];
+    elseif position == 2 %Both heels
+        XValues = [bottomleft_new(i,1) leftleft_new(i,1) rightleft_new(i,1) leftright_new(i,1) rightright_new(i,1) bottomright_new(i,1) bottomleft_new(i,1)];
+        YValues = [bottomleft_new(i,2) leftleft_new(i,2) rightleft_new(i,2) leftright_new(i,2) rightright_new(i,2) bottomright_new(i,2) bottomleft_new(i,2)];
+        h=fill(XValues,YValues,'r');
+        set(h,'facealpha',.5);
+        hold on
     elseif position == 1
-        if RH == 1
-            XValues = [bottomright_new(n,1) leftright_new(n,1) rightright_new(n,1) bottomright_new(n,1)];
-            YValues = [bottomright_new(n,2) leftright_new(n,2) rightright_new(n,2) bottomright_new(n,2)];
-        else
-            XValues = [bottomleft_new(n,1) leftleft_new(n,1) rightleft_new(n,1) bottomleft_new(n,1)];
-            YValues = [bottomleft_new(n,2) leftleft_new(n,2) rightleft_new(n,2) bottomleft_new(n,2)];
+        if RH == 1 %Right heel only
+            XValues = [bottomright_new(i,1) leftright_new(i,1) rightright_new(i,1) bottomright_new(i,1)];
+            YValues = [bottomright_new(i,2) leftright_new(i,2) rightright_new(i,2) bottomright_new(i,2)];
+            h=fill(XValues,YValues,'b');
+            set(h,'facealpha',.5);
+            hold on
+        else %Left heel only
+            XValues = [bottomleft_new(i,1) leftleft_new(i,1) rightleft_new(i,1) bottomleft_new(i,1)];
+            YValues = [bottomleft_new(i,2) leftleft_new(i,2) rightleft_new(i,2) bottomleft_new(i,2)];
+            h=fill(XValues,YValues,'b');
+            set(h,'facealpha',.5);
+            hold on
         end
-    else
+    else %No foot detection
         XValues=[];
         YValues=[];
         fprintf('\n')
         fprintf('Your feet are not detected')
     end
+    %Plots raw values of each foot point regardless of whether or not it is
+    %in contact with the ground. 
     plot(XValues,YValues,'m*')
     hold on
+    %If the feet are detected, this portion locates the center of the base
+    %of support. This code was found by Dr. Ann Reinthal and is a basic
+    %code for finding the center of a centroid. 
     if position > 0
         xv=XValues([2:end 1]);
         yv=YValues([2:end 1]);
@@ -198,26 +254,37 @@ for i=1:74
         A = sum( aa ) /2;
         xc = sum( (XValues+xv).*aa  ) /6/A;
         yc = sum( (YValues+yv).*aa  ) /6/A;
-        RawXValues = [bottomleft_new(n,1) leftleft_new(n,1) topleft_new(n,1) topright_new(n,1) rightright_new(n,1) bottomright_new(n,1) bottomleft_new(n,1)];
-        RawYValues = [bottomleft_new(n,2) leftleft_new(n,2) topleft_new(n,2) topright_new(n,2) rightright_new(n,2) bottomright_new(n,2) bottomleft_new(n,2)];
-        fill(XValues,YValues,'c')
+        RawXValues = [bottomleft_new(i,1) leftleft_new(i,1) topleft_new(i,1) topright_new(i,1) leftright_new(i,1) rightleft_new(i,1) rightright_new(i,1) bottomright_new(i,1) bottomleft_new(i,1)];
+        RawYValues = [bottomleft_new(i,2) leftleft_new(i,2) topleft_new(i,2) topright_new(i,2) leftright_new(i,2) rightleft_new(i,2) rightright_new(i,2) bottomright_new(i,2) bottomleft_new(i,2)];
+        %Plots center of base of support
+        plot(xc,yc,'b+',RawXValues,RawYValues,'k*')
         hold on
-        plot(xc,yc,'b+',RawXValues,RawYValues,'m*')
-        hold on
-        plot(sacral(1),sacral(2),'ro',storage2(i,1),storage2(i,2),'ko')
+        %Plots center of mass
+        plot(sacral(1),sacral(2),'ro')
     else
+        %If no feet are detected, the center of the base of support is set 
+        %to (0,0) and it is not plotted.
         xc=0;
         yc=0;
     end 
+    %Turns on grid
     grid ON
-    hold off
-    xlim ([-70 10])  % can change the limits of the graph once larger area is being used 
-    ylim ([-10 70])
+    %Sets window boundaries
+    xlim ([-15 0])  % can change the limits of the graph once larger area is being used 
+    ylim ([-5 15])
+    %Sets title and axis labels
     title('Position of Center of Base of Support and Center of Mass')
     xlabel('X Position (in)')
     ylabel('Y Position (in)')
+    %Draws grid
     drawnow;
+    %Turns off the data from this frame so new data from the next frame can
+    %be plotted seperately.
+    hold off
+    %Solves for the distance between the COM and COBOS and logs it into a
+    %matrix where each row represents a different frame.
     COMtoBOSdistance(i,1) = ((sacral(1)-xc).^2+(sacral(2)-yc).^2).^(1/2);
-    pause(.5)
+    %This delays the code before running the next frame.
+    pause(.1)
 end
 %plot(1:1:49,COMtoBOSdistance,'k');
