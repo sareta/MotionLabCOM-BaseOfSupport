@@ -260,7 +260,8 @@ for i=1:size(storage1,1)
         plot(xc,yc,'b+',RawXValues,RawYValues,'k*')
         hold on
         %Plots center of mass
-        plot(sacral(1),sacral(2),'ro')
+        plot(sacral(i,1),sacral(i,2),'ro')
+        hold on
     else
         %If no feet are detected, the center of the base of support is set 
         %to (0,0) and it is not plotted.
@@ -270,14 +271,15 @@ for i=1:size(storage1,1)
     %Turns on grid
     grid ON
     %Sets window boundaries
-    xlim ([-15 0])  % can change the limits of the graph once larger area is being used 
-    ylim ([-5 15])
+    xlim ([-100 10])  % can change the limits of the graph once larger area is being used 
+    ylim ([-20 60])
     %Sets title and axis labels
     title('Position of Center of Base of Support and Center of Mass')
     xlabel('X Position (in)')
     ylabel('Y Position (in)')
     %Draws grid
     drawnow;
+    F(i)=getframe(gcf);
     %Turns off the data from this frame so new data from the next frame can
     %be plotted seperately.
     hold off
@@ -285,6 +287,15 @@ for i=1:size(storage1,1)
     %matrix where each row represents a different frame.
     COMtoBOSdistance(i,1) = ((sacral(1)-xc).^2+(sacral(2)-yc).^2).^(1/2);
     %This delays the code before running the next frame.
-    pause(.1)
 end
+%{
+writerObj = VideoWriter('myVideo1.avi');
+writerobj.FrameRate = 5;
+open(writerObj);
+for i=1:length(F)
+    frame = F(i);
+    writeVideo(writerObj, frame);
+end
+close(writerObj);
+%}
 %plot(1:1:49,COMtoBOSdistance,'k');

@@ -9,7 +9,7 @@ end
 %Make an object of arduino
 a=arduino();
 %Set time bounds
-Max = 50;
+Max = 150;
 %Set time interval
 InitialTime = 1;
 %Set initial time
