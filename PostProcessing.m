@@ -247,7 +247,7 @@ for i=1:size(storage1,1)
     end
     %Plots raw values of each foot point regardless of whether or not it is
     %in contact with the ground. 
-    plot(XValues,YValues,'m*')
+    %plot(XValues,YValues,'m*')
     hold on
     %If the feet are detected, this portion locates the center of the base
     %of support. This code was found by Dr. Ann Reinthal and is a basic
@@ -266,10 +266,7 @@ for i=1:size(storage1,1)
         hold on
         %Plots center of mass
         plot(sacral(i,1),sacral(i,2),'ro')
-<<<<<<< HEAD
         hold on
-=======
->>>>>>> 7b3aafed096463111c2ae05c379d96a94393b42f
     else
         %If no feet are detected, the center of the base of support is set 
         %to (0,0) and it is not plotted.
@@ -279,13 +276,8 @@ for i=1:size(storage1,1)
     %Turns on grid
     grid ON
     %Sets window boundaries
-<<<<<<< HEAD
-    xlim ([-100 10])  % can change the limits of the graph once larger area is being used 
-    ylim ([-20 60])
-=======
-    xlim ([-25 0])  % can change the limits of the graph once larger area is being used 
-    ylim ([-30 80])
->>>>>>> 7b3aafed096463111c2ae05c379d96a94393b42f
+    xlim ([-30 0])  % can change the limits of the graph once larger area is being used 
+    ylim ([-10 70])
     %Sets title and axis labels
     title('Position of Center of Base of Support and Center of Mass')
     xlabel('X Position (in)')
@@ -293,6 +285,7 @@ for i=1:size(storage1,1)
     %Draws grid
     drawnow;
     F(i)=getframe(gcf);
+    
     %Turns off the data from this frame so new data from the next frame can
     %be plotted seperately.
     hold off
@@ -300,6 +293,8 @@ for i=1:size(storage1,1)
     %matrix where each row represents a different frame.
     COMtoBOSdistance(i,1) = ((sacral(1)-xc).^2+(sacral(2)-yc).^2).^(1/2);
     %This delays the code before running the next frame.
+    %legend('Base of Support','Center of Base of Support','Foot Locations','Center of Mass')
+    pause(.0001)
 end
 %{
 writerObj = VideoWriter('myVideo1.avi');
@@ -312,3 +307,4 @@ end
 close(writerObj);
 %}
 %plot(1:1:49,COMtoBOSdistance,'k');
+legend('Base of Support','Center of Base of Support','Foot Locations','Center of Mass')
