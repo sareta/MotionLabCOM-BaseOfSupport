@@ -40,6 +40,11 @@ topleft_new=[];
 rightleft_new=[];
 leftleft_new=[];
 
+LToeMin=0;
+LHeelMin=0;
+RToeMin=0;
+RHeelMin=0;
+
 %This creates a for loop that creates frames in the animation for each of
 %the captures. It finds the size of your capture using the storage values
 %from 'RawDataCollection.m'
@@ -64,34 +69,34 @@ for i=1:size(storage1,1)
     %reference frames of the sources and the sensors. When these matricies
     %are complete, the row number will identify the frame, column 1 will be
     %the x position, and column 2 will be the y position. 
-    topleft_new(i,1) = storage1(i,1)+lefttoe*cosd(el1)*cosd(az1);
-    topleft_new(i,2) = storage1(i,2)+lefttoe*cosd(el1)*sind(az1);
-    bottomleft_new(i,1) = storage1(i,1)-leftheel*cosd(el1)*cosd(az1);
-    bottomleft_new(i,2) = storage1(i,2)-leftheel*sind(az1)*cosd(el1);
+    topleft_new(i,1) = storage1(i,1)+lefttoe*cosd(az1);%cosd(el1)*
+    topleft_new(i,2) = storage1(i,2)+lefttoe*sind(az1);%*cosd(el1)
+    bottomleft_new(i,1) = storage1(i,1)-leftheel*cosd(az1);%*cosd(el1)
+    bottomleft_new(i,2) = storage1(i,2)-leftheel*sind(az1);%*cosd(el1)
     %Note: Because the toe and heel are alligned with the x direction of 
     %the sensor, the roll angle does not effect the XY location of the toe
     %and heel.
-    rightleft_new(i,1) = storage1(i,1)-leftinner*cosd(rol1)*sind(az1);
-    rightleft_new(i,2) = storage1(i,2)+leftinner*cosd(rol1)*cosd(az1);
-    leftleft_new(i,1) = storage1(i,1)+leftoutside*cosd(rol1)*sind(az1);
-    leftleft_new(i,2) = storage1(i,2)-leftoutside*cosd(az1)*cosd(rol1);
+    rightleft_new(i,1) = storage1(i,1)-leftinner*sind(az1);%*cosd(rol1)
+    rightleft_new(i,2) = storage1(i,2)+leftinner*cosd(az1);%*cosd(rol1)
+    leftleft_new(i,1) = storage1(i,1)+leftoutside*sind(az1);%*cosd(rol1)
+    leftleft_new(i,2) = storage1(i,2)-leftoutside*cosd(az1);%*cosd(rol1)
     %Note: Because the sides of the foot are alligned with the y direction 
     %of the sensor, the elevation angle does not effect the XY location of 
     %the toe and heel.
     
-    topright_new(i,1) = storage3(i,1)+righttoe*cosd(el3)*cosd(az3);
-    topright_new(i,2)= storage3(i,2)+righttoe*cosd(el3)*sind(az3);
-    bottomright_new(i,1) = storage3(i,1)-leftheel*cosd(el3)*cosd(az3);
-    bottomright_new(i,2) = storage3(i,2)-leftheel*cosd(el3)*sind(az3);
-    rightright_new(i,1) = storage3(i,1)-leftinner*cosd(rol3)*sind(az3);
-    rightright_new(i,2) = storage3(i,2)+leftinner*cosd(rol3)*cosd(az3);
-    leftright_new(i,1) = storage3(i,1)+leftoutside*cosd(rol3)*sind(az3);
-    leftright_new(i,2) = storage3(i,2)-leftoutside*cosd(az3)*cosd(rol3);
+    topright_new(i,1) = storage3(i,1)+righttoe*cosd(az3);%*cosd(el3)
+    topright_new(i,2)= storage3(i,2)+righttoe*cosd(el3)*sind(az3);%
+    bottomright_new(i,1) = storage3(i,1)-leftheel*cosd(az3);%*cosd(el3)
+    bottomright_new(i,2) = storage3(i,2)-leftheel*sind(az3);%*cosd(el3)
+    rightright_new(i,1) = storage3(i,1)-leftinner*sind(az3);%*cosd(rol3)
+    rightright_new(i,2) = storage3(i,2)+leftinner*cosd(az3);%*cosd(rol3)
+    leftright_new(i,1) = storage3(i,1)+leftoutside*sind(az3);%*cosd(rol3)
+    leftright_new(i,2) = storage3(i,2)-leftoutside*cosd(az3);%*cosd(rol3)
     %The right foot has nearly all of the same angular principles as the
     %left foot. See diagram in guide for assistance. 
     
-    sacral(i,1) = storage2(i,1)+6*sind(el2)*cosd(az2);
-    sacral(i,2) = storage2(i,2)+6*sind(el2)*sind(az2);
+    sacral(i,1) = storage2(i,1)+6*sind(el2)*cosd(az2);%+1.2*cos(el2)*cos(az2);
+    sacral(i,2) = storage2(i,2)+6*sind(el2)*sind(az2);%+1.2*cos(el2)*sin(az2);
     %The center of mass is located using the location of the sacral marker
     %(storage2(i,1) and storage2(i,2) and the offset is incorporated with
     %the other part. The offset is in the positive z direction on the
@@ -261,7 +266,10 @@ for i=1:size(storage1,1)
         hold on
         %Plots center of mass
         plot(sacral(i,1),sacral(i,2),'ro')
+<<<<<<< HEAD
         hold on
+=======
+>>>>>>> 7b3aafed096463111c2ae05c379d96a94393b42f
     else
         %If no feet are detected, the center of the base of support is set 
         %to (0,0) and it is not plotted.
@@ -271,8 +279,13 @@ for i=1:size(storage1,1)
     %Turns on grid
     grid ON
     %Sets window boundaries
+<<<<<<< HEAD
     xlim ([-100 10])  % can change the limits of the graph once larger area is being used 
     ylim ([-20 60])
+=======
+    xlim ([-25 0])  % can change the limits of the graph once larger area is being used 
+    ylim ([-30 80])
+>>>>>>> 7b3aafed096463111c2ae05c379d96a94393b42f
     %Sets title and axis labels
     title('Position of Center of Base of Support and Center of Mass')
     xlabel('X Position (in)')
